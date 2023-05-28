@@ -25,10 +25,23 @@ export default function User() {
 
     return (
         <>
-            <UserHeader name={currentUser.name} />
-            {links.map((link) => {
-                return <Link key={link.text} />;
-            })}
+            <UserHeader
+                name={currentUser.name}
+                username={currentUser.username}
+                imageUrl={currentUser.profile_pic}
+            />
+            <div className="flex flex-col gap-4 container mx-auto items-center p-5">
+                {links.map((link) => {
+                    return (
+                        <Link
+                            key={link.order}
+                            linkText={link.text}
+                            linkUrl={link.url}
+                            linkPic={link.link_pic}
+                        />
+                    );
+                })}
+            </div>
         </>
     );
 }
