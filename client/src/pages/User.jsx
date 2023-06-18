@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UserHeader from "../components/UserHeader";
 import Link from "../components/Link";
@@ -8,10 +8,17 @@ export default function User() {
     const [currentUser, setCurrentUser] = useState({});
     const [links, setLinks] = useState([]);
 
+    let [userFound, setUserFound] = useState(true);
+    const navigate = useNavigate();
+
     async function getUser(username) {
         const apiUrl = import.meta.env.VITE_API_URL + username;
         const response = await fetch(apiUrl);
+        if (response.status === 404) {
+            setUserFound(false);
+        }
         const userData = await response.json();
+
         setCurrentUser({ ...userData });
     }
 
@@ -22,6 +29,10 @@ export default function User() {
     useEffect(() => {
         if (currentUser.links) setLinks(currentUser.links);
     }, [currentUser]);
+
+    useEffect(() => {
+        if (!userFound) return navigate("/404");
+    });
 
     return (
         <>
